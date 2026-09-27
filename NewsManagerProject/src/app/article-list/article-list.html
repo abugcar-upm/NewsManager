@@ -1,1 +1,19 @@
-<p>article-list works!</p>
+<div class="articles-list">
+    <div class="articles-container">
+        <div class="card mb-3" *ngFor="let article of (articlesList$ | async) | filter:term | filterCategory:category">
+            <img class="card-img-top" [src]="'data:' + article.thumbnail_media_type + ';base64,' +article.thumbnail_image ">
+            <div class="card-body">
+                <p [innerHTML]="article.category"></p>
+                <h5 class="card-title" [innerHTML]="article.title"></h5>
+                <h6 class="card-subtitle mb-2 text-muted" [innerHTML]="article.subtitle"></h6>
+                <p class="card-text" [innerHTML]="article.abstract"></p>
+                <button class="btn btn-primary btn-sm me-2">            
+                    Edit
+                </button>
+                <button class="btn btn-danger btn-sm">            
+                    Remove
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

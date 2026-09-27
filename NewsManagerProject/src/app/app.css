@@ -1,0 +1,15 @@
+h1{
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.navbar{
+    width: 100%;
+    height: 100%;
+    background-color: rgb(236, 236, 236);
+}
+
+.navbar-nav .nav-link.active {
+  font-weight: bold;
+}
