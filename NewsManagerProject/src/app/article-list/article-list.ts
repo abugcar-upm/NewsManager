@@ -1,22 +1,21 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NewsService } from '../services/news';
 import { Article } from '../interfaces/article';
-import { Ng2SearchPipe } from '../pipes/ng2-search-pipe-pipe';
-import { FilterCategoryPipe } from '../pipes/filter-category-pipe';
-import { Observable } from 'rxjs'
+import { combineLatest, Observable } from 'rxjs'
+import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import * as _ from 'lodash';
 
 @Component({
-  imports: [FormsModule, CommonModule, Ng2SearchPipe, FilterCategoryPipe],
+  imports: [FormsModule, CommonModule, RouterLink],
   selector: 'app-article-list',
   styleUrl: './article-list.css',
   templateUrl: './article-list.html',
 })
 export class ArticleList {
-  @Input() term: string = '';
   article: Article = {
     id: 0,
     id_user: 0,
@@ -31,20 +30,28 @@ export class ArticleList {
     image_media_type: '',
   };
   articlesList$!: Observable<Article[]>;
+  filteredArticles$!: Observable<Article[]>;
   imageError: string | null = null;
   isImageSaved: boolean = false;
   cardImageBase64: string | null = null;
-  category!: string | null;
+  category!: Observable<string | null>;
 
   constructor(private newsService: NewsService, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
     this.articlesList$ = this.newsService.getArticles();
-    this.route.queryParamMap.subscribe(params => {
-      this.category = params.get('category');
-      console.log('Category actualizada:', this.category);
-    })
+    this.category = this.route.paramMap.pipe(
+      map(params => params.get('category'))
+    );
+
+    this.filteredArticles$ = combineLatest([this.articlesList$, this.category]).pipe(
+      map(([articles, category]) =>
+        category
+          ? articles.filter(a => a.category?.toLowerCase() === category.toLowerCase())
+          : articles
+      )
+    );
   }
 
   fileChangeEvent(fileInput: any) {

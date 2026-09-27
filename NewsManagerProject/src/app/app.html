@@ -2,11 +2,12 @@
 <div class="navbar">
     <nav class="navbar navbar-expand-lg ms-4 me-5 justify-content-between">
         <div class="navbar-nav">
-            <a class="nav-item nav-link" [routerLink]="['/']" routerLinkActive="active">All</a>
-            <a class="nav-item nav-link" [routerLink]="['/']" [queryParams]="{'category':'national'}" routerLinkActive="active">National</a>
-            <a class="nav-item nav-link" [routerLink]="['/']" [queryParams]="{'category':'international'}" routerLinkActive="active">International</a>
-            <a class="nav-item nav-link" [routerLink]="['/']" [queryParams]="{'category':'sports'}" routerLinkActive="active">Sports</a>
-            <a class="nav-item nav-link" [routerLink]="['/']" [queryParams]="{'category':'economy'}" routerLinkActive="active">Technology</a>
+            <a class="nav-item nav-link" [routerLink]="['/']" routerLinkActive="active">All articles</a>
+            <a class="nav-item nav-link" [routerLink]="['/national']" routerLinkActive="active">National</a>
+            <a class="nav-item nav-link" [routerLink]="['/international']" routerLinkActive="active">International</a>
+            <a class="nav-item nav-link" [routerLink]="['/sports']" routerLinkActive="active">Sports</a>
+            <a class="nav-item nav-link" [routerLink]="['/technology']" routerLinkActive="active">Technology</a>
+            <a class="nav-item nav-link" [routerLink]="['/economy']" routerLinkActive="active">Economy</a>
         </div>
         <div class="d-flex">
             <form class="form-inline">
