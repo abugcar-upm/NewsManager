@@ -1,3 +1,29 @@
 <h1>EIT Newspaper</h1>
-
+<div class="navbar">
+    <nav class="navbar navbar-expand-lg ms-4 me-5 justify-content-between">
+        <div class="navbar-nav">
+            <a class="nav-link" [routerLink]="['/']" routerLinkActive="active">All articles</a>
+            <a class="nav-link" [routerLink]="['/national']" routerLinkActive="active">National</a>
+            <a class="nav-link" [routerLink]="['/international']" routerLinkActive="active">International</a>
+            <a class="nav-link" [routerLink]="['/sports']" routerLinkActive="active">Sports</a>
+            <a class="nav-link" [routerLink]="['/technology']" routerLinkActive="active">Technology</a>
+            <a class="nav-link" [routerLink]="['/economy']" routerLinkActive="active">Economy</a>
+        </div>
+        <div class="d-flex">
+            <form class="form-inline">
+                <input 
+                    class="form-control" 
+                    type="search" 
+                    placeholder="Search articles" 
+                    [ngModel]="term"
+                    (ngModelChange)="termChange($event)"
+                    autocomplete="off"
+                    name="filter"
+                >
+            </form>
+            <button class="btn btn-primary ms-3" [routerLink]="['/create']">Create Article</button>
+        </div>
+    </nav>
+</div>
+<br>
 <router-outlet></router-outlet>

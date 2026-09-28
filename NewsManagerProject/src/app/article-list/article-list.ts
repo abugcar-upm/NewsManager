@@ -36,7 +36,7 @@ export class ArticleList {
   isImageSaved: boolean = false;
   cardImageBase64: string | null = null;
   category!: Observable<string | null>;
-  term: string = "";
+  term$!: Observable<string | null>;
 
   constructor(private newsService: NewsService, private route: ActivatedRoute) {
   }
@@ -53,6 +53,10 @@ export class ArticleList {
           ? articles.filter(a => a.category?.toLowerCase() === category.toLowerCase())
           : articles
       )
+    );
+
+    this.term$ = this.route.queryParamMap.pipe(
+      map(params => params.get('term'))
     );
   }
 
@@ -91,5 +95,4 @@ export class ArticleList {
     }
     return true;
   }
-
 }
