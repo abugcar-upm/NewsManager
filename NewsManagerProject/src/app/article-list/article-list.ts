@@ -8,9 +8,10 @@ import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import * as _ from 'lodash';
+import { Ng2SearchPipe } from '../pipes/ng2-search-pipe-pipe';
 
 @Component({
-  imports: [FormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, CommonModule, RouterLink, Ng2SearchPipe],
   selector: 'app-article-list',
   styleUrl: './article-list.css',
   templateUrl: './article-list.html',
@@ -35,6 +36,7 @@ export class ArticleList {
   isImageSaved: boolean = false;
   cardImageBase64: string | null = null;
   category!: Observable<string | null>;
+  term: string = "";
 
   constructor(private newsService: NewsService, private route: ActivatedRoute) {
   }
