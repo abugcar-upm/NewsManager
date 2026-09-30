@@ -6,7 +6,7 @@ import { ArticleEdition } from './article-edition/article-edition';
 export const routes: Routes = [
     { path: '', component: ArticleList },
     { path: 'create', component: ArticleEdition },
+    { path: 'edit/:id', component: ArticleEdition },
     { path: ':category', component: ArticleList },
     { path: 'article/:id', component: ArticleDetails },
-    { path: 'edit/:id', component: ArticleEdition },
 ];

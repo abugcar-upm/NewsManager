@@ -1,11 +1,12 @@
 export interface Article {
     id: number;
     id_user: number;
-    abstract: string;
-    subtitle: string;
-    update_date: string;
-    category: string;
     title: string;
+    subtitle: string;
+    abstract: string;
+    body: string;
+    category: string;
+    update_date: string;
     thumbnail_image: string;
     thumbnail_media_type: string;
     image_data: string;

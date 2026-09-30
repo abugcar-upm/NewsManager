@@ -1,1 +1,121 @@
-<p>article-edition works!</p>
+<div class="article-form">
+    <h2>{{setTitle()}}</h2>
+    <form #articleForm="ngForm" (ngSubmit)="submitForm()">
+        <div class="form-group">
+            <label> Title </label>
+            <input appHighlight class="form-control" 
+                type="text" 
+                required
+                minlength="10"
+                [(ngModel)]="article.title" 
+                name="title" 
+                #title="ngModel"
+                [ngClass]="{
+                'valid-field': title.valid,
+                'invalid-field': !title.valid,
+                'invalid-touched': title.touched && title.invalid
+            }">
+            <div class="alert alert-danger" *ngIf="title.touched && !title.valid">
+                <div *ngIf="title.errors && title.errors['required']">
+                    Title is required.
+                </div>
+                <div *ngIf="title.errors && title.errors['minlength']">
+                    Title must be at least 10 characters long.
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label> Subtitle </label>
+            <input appHighlight class="form-control" 
+                type="text" 
+                required
+                minlength="10"
+                [(ngModel)]="article.subtitle" 
+                name="subtitle" 
+                #subtitle="ngModel"
+                [ngClass]="{
+                'valid-field': subtitle.valid,
+                'invalid-field': !subtitle.valid,
+                'invalid-touched': subtitle.touched && subtitle.invalid
+            }">
+            <div class="alert alert-danger" *ngIf="subtitle.touched && !subtitle.valid">
+                <div *ngIf="subtitle.errors && subtitle.errors['required']">
+                    Subtitle is required.
+                </div>
+                <div *ngIf="subtitle.errors && subtitle.errors['minlength']">
+                    Subtitle must be at least 10 characters long.
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label> Body </label>
+            <textarea appHighlight class="form-control" 
+                [(ngModel)]="article.body" 
+                name="body" 
+                #body="ngModel"
+                [ngClass]="body.valid ? 'input-valid': 'input-invalid'">
+            </textarea>
+        </div>
+        <div class="form-group">
+            <label> Abstract </label>
+            <input appHighlight class="form-control" 
+                type="text" 
+                required 
+                minlength="10" 
+                [(ngModel)]="article.abstract" 
+                name="abstract" 
+                #abstract="ngModel"
+                [ngClass]="{
+                'valid-field': abstract.valid,
+                'invalid-field': !abstract.valid,
+                'invalid-touched': abstract.touched && abstract.invalid
+            }">
+            <div class="alert alert-danger" *ngIf="abstract.touched && !abstract.valid">
+                <div *ngIf="abstract.errors && abstract.errors['required']">
+                    Abstract is required.
+                </div>
+                <div *ngIf="abstract.errors && abstract.errors['minlength']">
+                    Abstract must be at least 10 characters long.
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label> Category </label>
+            <select appHighlight class="form-select" 
+                required
+                [(ngModel)]="article.category" 
+                name="category" 
+                #category="ngModel">
+                <option value="National">National</option>
+                <option value="International">International</option>
+                <option value="Sports">Sports</option>
+                <option value="Technology">Technology</option>
+            </select>
+            <div class="alert alert-danger" *ngIf="category.touched && !category.valid">
+                <div *ngIf="category.errors && category.errors['required']">
+                    Category is required.
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Image</label>
+            <input #imageInput type="file" class="form-control" accept=".png, .jpeg" name="image"/>
+            <button type="button" class="btn btn-light btn-sm mt-2 border-dark-subtle" (click)="deleteFile()">Delete file</button>
+        </div>
+        <div class="button-group">
+            <button class="btn btn-primary btn-sm mr-1" 
+                type="submit" 
+                [disabled]="!articleForm.form.valid">   
+                Save
+            </button>
+            &nbsp;
+            <button class="btn btn-primary btn-sm mr-1" 
+                type="reset">
+                Reset
+            </button>
+        </div>
+</form>
+<button class="btn btn-primary btn-m mb-3" [routerLink]="['/']">
+    Go back
+</button>
+</div>
