@@ -17,7 +17,7 @@ import { CategoryFilterPipePipe } from '../pipes/category-filter-pipe-pipe';
   templateUrl: './article-list.html',
 })
 export class ArticleList {
-  articlesList$!: Observable<Article[]>;
+  articlesList$!: Article[];
   category!: Observable<string | null>;
   term$!: Observable<string | null>;
 
@@ -25,12 +25,23 @@ export class ArticleList {
   }
 
   ngOnInit() {
-    this.articlesList$ = this.newsService.getArticles();
+    this.getArticleList();
     this.category = this.route.paramMap.pipe(
       map(params => params.get('category'))
     );
     this.term$ = this.route.queryParamMap.pipe(
       map(params => params.get('term'))
     );
+  }
+
+  getArticleList(){
+    this.newsService.getArticles().subscribe({
+      next: (res) => {
+        this.articlesList$ = res;
+      },
+      error: (err) => {
+        console.log(`An error has ocurred: ${err.statusText}`);
+      }
+    })
   }
 }
