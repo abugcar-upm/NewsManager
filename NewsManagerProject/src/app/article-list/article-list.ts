@@ -8,16 +8,16 @@ import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { Ng2SearchPipe } from '../pipes/ng2-search-pipe-pipe';
+import { CategoryFilterPipePipe } from '../pipes/category-filter-pipe-pipe';
 
 @Component({
-  imports: [FormsModule, CommonModule, RouterLink, Ng2SearchPipe],
+  imports: [FormsModule, CommonModule, RouterLink, Ng2SearchPipe, CategoryFilterPipePipe],
   selector: 'app-article-list',
   styleUrl: './article-list.css',
   templateUrl: './article-list.html',
 })
 export class ArticleList {
   articlesList$!: Observable<Article[]>;
-  filteredArticles$!: Observable<Article[]>;
   category!: Observable<string | null>;
   term$!: Observable<string | null>;
 
@@ -29,15 +29,6 @@ export class ArticleList {
     this.category = this.route.paramMap.pipe(
       map(params => params.get('category'))
     );
-
-    this.filteredArticles$ = combineLatest([this.articlesList$, this.category]).pipe(
-      map(([articles, category]) =>
-        category
-          ? articles.filter(a => a.category?.toLowerCase() === category.toLowerCase())
-          : articles
-      )
-    );
-
     this.term$ = this.route.queryParamMap.pipe(
       map(params => params.get('term'))
     );
