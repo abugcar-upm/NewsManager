@@ -1,7 +1,8 @@
 <div class="articles-list">
     <div class="articles-container">
         <div class="card mb-3" *ngFor="let article of (articlesList() | filter:((term$ | async) ?? '') | categoryFilterPipe:(category()))">
-            <img class="card-img-top"
+            <img *ngIf="article.thumbnail_image"
+                class="card-img-top"
                 style="cursor: pointer;"
                 [src]="'data:' + article.thumbnail_media_type + ';base64,' + article.thumbnail_image"
                 [alt]="article.title"
