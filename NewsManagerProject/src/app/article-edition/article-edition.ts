@@ -7,9 +7,6 @@ import { ViewChild } from '@angular/core';
 import { NewsService } from '../services/news';
 import * as _ from 'lodash';
 import { RouterLink, ActivatedRoute } from '@angular/router';
-import { tap } from 'rxjs/operators';
-import { Observable } from 'rxjs'
-
 
 @Component({
   imports: [FormsModule, NgClass, CommonModule, RouterLink],
@@ -27,7 +24,8 @@ export class ArticleEdition {
   @ViewChild('articleForm') articleForm: any;
   @ViewChild('imageInput') image: any;
 
-  constructor(private newsService: NewsService, private route: ActivatedRoute) {  }
+  constructor(private newsService: NewsService, private route: ActivatedRoute) { 
+  }
 
   ngOnInit() {
     this.articleId = this.route.snapshot.paramMap.get('id');
@@ -43,31 +41,50 @@ export class ArticleEdition {
       })
     }else{
       this.article = {
-        id: 0,
-        id_user: 0,
-        abstract: '',
-        subtitle: '',
-        body:'',
-        update_date: '',
-        category: 'National',
-        title: '',
-        thumbnail_image: '',
-        thumbnail_media_type: '',
-        image_data: '',
-        image_media_type: '',
-      };
+        abstract:"", 
+        body:"",
+        category:"",
+        id_user:49,
+        subtitle:"",
+        image_data:"",
+        image_media_type:"",
+        title:"",
+      }
     }
   }
 
   submitForm(): void {
-    if (this.articleId=null){
+    this.articleId = this.route.snapshot.paramMap.get('id');
+    const articleWithCorrectFormat = {
+        ...this.article,
+        title: this.replaceQuotes(this.article.title),
+        subtitle: this.replaceQuotes(this.article.subtitle),
+        abstract: this.replaceQuotes(this.article.abstract),
+        body: this.replaceQuotes(this.article.body),
+      };
+    if (this.articleId===null){
       window.alert("The article "+ this.article.title + " has been published");
-      this.newsService.createArticle(this.article);
-      this.articleForm.resetForm();
+      this.newsService.createArticle(articleWithCorrectFormat).subscribe({
+        next: () => {
+          this.articleForm.resetForm();
+          console.log("Article created");
+        },
+        error: (err) => {
+          window.alert("An error has ocurred:" + err.statusText);
+          console.log(`An error has ocurred: ${err.statusText}`);
+        }
+      });
     }else{
-      window.alert("The article "+ this.article.title + " has been edited");
-      this.newsService.updateArticle(this.article);
-      this.articleForm.resetForm();
+      this.newsService.updateArticle(articleWithCorrectFormat).subscribe({
+        next: () => {
+          window.alert("The article "+ this.article.title + " has been edited");
+          console.log("Article updated");
+        },
+        error: (err) => {
+          window.alert("An error has ocurred:" + err.statusText);
+          console.log(`An error has ocurred: ${err.statusText}`);
+        }
+      });
     }
   }
 
@@ -81,6 +98,10 @@ export class ArticleEdition {
     }else{
       return "Create article";
     }
+  }
+
+  private replaceQuotes(text: string): string {
+    return text.replace(/'/g, '’');
   }
 
   fileChangeEvent(fileInput: any) {

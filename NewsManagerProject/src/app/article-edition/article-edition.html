@@ -61,7 +61,8 @@
             <input appHighlight class="form-control" 
                 type="text" 
                 required 
-                minlength="10" 
+                minlength="10"
+                maxlength="256"
                 [(ngModel)]="article.abstract" 
                 name="abstract" 
                 #abstract="ngModel"
@@ -77,6 +78,9 @@
                 <div *ngIf="abstract.errors && abstract.errors['minlength']">
                     Abstract must be at least 10 characters long.
                 </div>
+                <div *ngIf="abstract.errors && abstract.errors['maxlength']">
+                    Abstract must be at most 256 characters long.
+                </div>
             </div>
         </div>
         <div class="form-group">
@@ -91,15 +95,10 @@
                 <option value="Sports">Sports</option>
                 <option value="Technology">Technology</option>
             </select>
-            <div class="alert alert-danger" *ngIf="category.touched && !category.valid">
-                <div *ngIf="category.errors && category.errors['required']">
-                    Category is required.
-                </div>
-            </div>
         </div>
         <div class="form-group">
             <label>Image</label>
-            <input #imageInput type="file" class="form-control" accept=".png, .jpeg" name="image"/>
+            <input type="file" class="form-control" accept=".png, .jpeg" name="image" (change)="fileChangeEvent($event)"/>
             <button type="button" class="btn btn-light btn-sm mt-2 border-dark-subtle" (click)="deleteFile()">Delete file</button>
         </div>
         <div class="button-group">

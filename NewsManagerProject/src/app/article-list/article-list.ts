@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NewsService } from '../services/news';
 import { Article } from '../interfaces/article';
-import { combineLatest, Observable } from 'rxjs'
+import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
@@ -17,8 +17,8 @@ import { CategoryFilterPipePipe } from '../pipes/category-filter-pipe-pipe';
   templateUrl: './article-list.html',
 })
 export class ArticleList {
-  articlesList$!: Article[];
-  category!: Observable<string | null>;
+  articlesList = signal<Article[]>([]);
+  category = signal<string | null>(null);
   term$!: Observable<string | null>;
 
   constructor(private newsService: NewsService, private route: ActivatedRoute) {
@@ -26,9 +26,9 @@ export class ArticleList {
 
   ngOnInit() {
     this.getArticleList();
-    this.category = this.route.paramMap.pipe(
-      map(params => params.get('category'))
-    );
+    this.route.paramMap.subscribe(params => {
+      this.category.set(params.get('category'));
+    })
     this.term$ = this.route.queryParamMap.pipe(
       map(params => params.get('term'))
     );
@@ -37,7 +37,8 @@ export class ArticleList {
   getArticleList(){
     this.newsService.getArticles().subscribe({
       next: (res) => {
-        this.articlesList$ = res;
+        this.articlesList.set(res);
+        console.log(`Articles list: `, res);
       },
       error: (err) => {
         console.log(`An error has ocurred: ${err.statusText}`);
