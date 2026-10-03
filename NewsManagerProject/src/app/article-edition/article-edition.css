@@ -22,5 +22,11 @@
 }
 
 .form-group, .alert{
-    margin-top: 2%;
+  margin-top: 2%;
+}
+
+.article-details {
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 2%;
 }
