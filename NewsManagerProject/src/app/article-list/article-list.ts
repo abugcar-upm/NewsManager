@@ -38,11 +38,30 @@ export class ArticleList {
     this.newsService.getArticles().subscribe({
       next: (res) => {
         this.articlesList.set(res);
-        console.log(`Articles list: `, res);
+        console.log("Articles list: ", res);
       },
       error: (err) => {
-        console.log(`An error has ocurred: ${err.statusText}`);
+        console.log("An error has ocurred: ", err.statusText);
+        window.alert("An error has ocurred: " + err.statusText);
       }
     })
+  }
+
+  removeArticle(article: Article): void {
+    if (!confirm("Are you sure you want to delete the article "+article.title+"?")) {
+      return;
+    }
+
+    this.newsService.deleteArticle(article).subscribe({
+      next: () => {
+        window.alert("The article has been removed");
+        this.getArticleList();
+      },
+      error: (err) => {
+        console.error('Error deleting article:', err);
+        window.alert("An error has ocurred: " + err.statusText);
+      }
+      }
+    );
   }
 }
