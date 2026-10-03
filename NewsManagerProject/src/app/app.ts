@@ -1,10 +1,9 @@
-import { Component, signal, OnInit, inject } from '@angular/core';
-import {HttpParams} from "@angular/common/http";
-import { RouterLink, RouterOutlet, ActivatedRoute, Router } from '@angular/router';
+import { Component, signal, inject } from '@angular/core';
+import { RouterLink, RouterOutlet, ActivatedRoute, Router, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  imports: [RouterOutlet, FormsModule, RouterLink],
+  imports: [RouterOutlet, FormsModule, RouterLink, RouterLinkActive],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',

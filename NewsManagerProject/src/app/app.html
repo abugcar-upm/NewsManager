@@ -2,7 +2,7 @@
 <div class="navbar">
     <nav class="navbar navbar-expand-lg ms-4 me-5 justify-content-between">
         <div class="navbar-nav">
-            <a class="nav-link" [routerLink]="['/']" routerLinkActive="active">All articles</a>
+            <a class="nav-link" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">All articles</a>
             <a class="nav-link" [routerLink]="['/national']" routerLinkActive="active">National</a>
             <a class="nav-link" [routerLink]="['/international']" routerLinkActive="active">International</a>
             <a class="nav-link" [routerLink]="['/sports']" routerLinkActive="active">Sports</a>
