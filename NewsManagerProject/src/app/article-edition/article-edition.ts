@@ -89,7 +89,9 @@ export class ArticleEdition {
   }
 
   deleteFile(){
-    this.image.nativeElement.value="";
+    this.image.nativeElement.value='';
+    this.article.image_data = '';
+    this.article.image_media_type = '';
   }
 
   setTitle(){
@@ -102,6 +104,11 @@ export class ArticleEdition {
 
   private replaceQuotes(text: string): string {
     return text.replace(/'/g, '’');
+  }
+
+  updateImagePreview() {
+    console.log("Updating image preview");
+    this.article.image_data = this.article.image_data;
   }
 
   fileChangeEvent(fileInput: any) {
