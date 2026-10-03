@@ -1,1 +1,25 @@
-<p>article-details works!</p>
+<div class="container">
+
+    <div class="alert alert-danger" *ngIf="message">
+        <h4>{{ message }}</h4>
+    </div>
+
+    <div *ngIf="article">
+        <span class="badge bg-secondary">{{ article.category }}</span>
+        <h2>{{ article.title }}</h2>
+        <h4 class="text-muted">{{ article.subtitle }}</h4>
+
+        <img *ngIf="article.image_data"
+             class="img-fluid my-3"
+             [src]="'data:' + article.image_media_type + ';base64,' + article.image_data"
+             [alt]="article.title">
+
+        <p class="fw-bold" [innerHTML]="article.abstract"></p>
+        <div [innerHTML]="article.body"></div>
+
+        <hr>
+        <p class="text-muted">Last updated: {{ article.update_date }} by user {{ article.id_user }}</p>
+    </div>
+
+    <button class="btn btn-primary btn-sm mb-4" (click)="goBack()">Back</button>
+</div>
