@@ -20,11 +20,13 @@ export class ArticleList {
   articlesList = signal<Article[]>([]);
   category = signal<string | null>(null);
   term$!: Observable<string | null>;
+  message: string | null = null;
 
   constructor(private newsService: NewsService, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
+    this.message = null;
     this.getArticleList();
     this.route.paramMap.subscribe(params => {
       this.category.set(params.get('category'));
@@ -42,7 +44,7 @@ export class ArticleList {
       },
       error: (err) => {
         console.log("An error has ocurred: ", err.statusText);
-        window.alert("An error has ocurred: " + err.statusText);
+        this.message = "An error has ocurred: " + err.statusText;
       }
     })
   }

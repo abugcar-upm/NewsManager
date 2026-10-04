@@ -11,7 +11,6 @@ import { Article } from '../interfaces/article';
   templateUrl: './article-details.html',
 })
 export class ArticleDetails implements OnInit {
-
   article: Article | null = null;
   message: string | null = null;
 

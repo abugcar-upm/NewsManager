@@ -1,4 +1,10 @@
 <div class="article-form">
+    <div class="alert alert-danger" *ngIf="errorMessage()">
+        <h5>{{ errorMessage() }}</h5>
+    </div>
+    <div class="alert alert-success" *ngIf="message()">
+        <h5>{{ message() }}</h5>
+    </div>
     <h2>{{setTitle()}}</h2>
     <form #articleForm="ngForm" (ngSubmit)="submitForm()">
         <div class="form-group">
@@ -7,6 +13,7 @@
                 type="text" 
                 required
                 minlength="10"
+                maxlength="256"
                 [(ngModel)]="article.title" 
                 name="title" 
                 #title="ngModel"
@@ -22,6 +29,9 @@
                 <div *ngIf="title.errors && title.errors['minlength']">
                     Title must be at least 10 characters long.
                 </div>
+                <div *ngIf="title.errors && title.errors['maxlength']">
+                    Title must be at most 256 characters long.
+                </div>
             </div>
         </div>
         <div class="form-group">
@@ -30,6 +40,7 @@
                 type="text" 
                 required
                 minlength="10"
+                maxlength="256"
                 autocomplete="off"
                 [(ngModel)]="article.subtitle" 
                 name="subtitle" 
@@ -45,6 +56,9 @@
                 </div>
                 <div *ngIf="subtitle.errors && subtitle.errors['minlength']">
                     Subtitle must be at least 10 characters long.
+                </div>
+                <div *ngIf="subtitle.errors && subtitle.errors['maxlength']">
+                    Subtitle must be at most 256 characters long.
                 </div>
             </div>
         </div>
@@ -90,7 +104,11 @@
                 required
                 [(ngModel)]="article.category" 
                 name="category" 
-                #category="ngModel">
+                #category="ngModel"
+                [ngClass]="{
+                'valid-field': category.valid,
+                'invalid-field': !category.valid,
+                'invalid-touched': category.touched && category.invalid}">
                 <option value="National">National</option>
                 <option value="International">International</option>
                 <option value="Sports">Sports</option>
@@ -120,17 +138,15 @@
 
 <div class="article-details">
     <h2>Article Preview</h2><hr>
-    <p>{{article.category}}</p>
-    <p [ngStyle]="{fontSize: '25px', fontWeight: 'bold'}">{{article.title}}</p>
-    <p [ngStyle]="{fontSize: '18px'}">{{article.subtitle}}</p>
-    <p [innerHTML]="article.abstract"></p>
+    <span class="badge bg-secondary mb-2">{{ article.category | titlecase }}</span>
+    <h2>{{ article.title }}</h2>
+    <h4 class="text-muted">{{ article.subtitle }}</h4>
     <img *ngIf="article.image_data"
-        style="width: 60%; height: auto; margin-bottom: 10px;"
+        class="img-fluid my-3"
         [src]="'data:' + article.image_media_type + ';base64,' + article.image_data"
         [alt]="article.title"
     >
+    <p class="fw-bold" [innerHTML]="article.abstract"></p>
     <p [innerHTML]="article.body"></p>
-    <button class="btn btn-primary btn-m mb-3 mt-2" [routerLink]="['/']">
-        Go back
-    </button>
+    <button class="btn btn-primary btn-sm mb-4" (click)="goBack()">Back</button>
 </div>

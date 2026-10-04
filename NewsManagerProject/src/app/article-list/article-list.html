@@ -1,4 +1,7 @@
 <div class="articles-list">
+    <div class="alert alert-danger ms-5 w-50" *ngIf="message">
+        <h5>{{ message }}</h5>
+    </div>
     <div class="articles-container">
         <div class="card mb-3" *ngFor="let article of (articlesList() | filter:((term$ | async) ?? '') | categoryFilterPipe:(category()))">
             <img *ngIf="article.thumbnail_image"
@@ -9,7 +12,7 @@
                 [routerLink]="['/article', article.id]"
             >
             <div class="card-body">
-                <p [innerHTML]="article.category | titlecase"></p>
+                <span class="badge bg-secondary mb-2">{{ article.category | titlecase }}</span>
                 <h5 class="card-title" style="cursor: pointer;" [innerHTML]="article.title" [routerLink]="['/article', article.id]"></h5>
                 <h6 class="card-subtitle mb-2 text-muted" [innerHTML]="article.subtitle"></h6>
                 <p class="card-text" [innerHTML]="article.abstract"></p>

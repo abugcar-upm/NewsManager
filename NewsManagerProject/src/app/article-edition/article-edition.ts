@@ -1,15 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, signal } from '@angular/core';
+import { CommonModule, NgClass, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import {Article} from '../interfaces/article';
-import { NgClass } from '@angular/common';
-import { CommonModule } from '@angular/common';
-import { ViewChild } from '@angular/core';
 import { NewsService } from '../services/news';
 import * as _ from 'lodash';
-import { RouterLink, ActivatedRoute } from '@angular/router';
 
 @Component({
-  imports: [FormsModule, NgClass, CommonModule, RouterLink],
+  imports: [FormsModule, NgClass, CommonModule],
   selector: 'app-article-edition',
   styleUrl: './article-edition.css',
   templateUrl: './article-edition.html',
@@ -21,25 +19,30 @@ export class ArticleEdition {
   isImageSaved: boolean = false;
   cardImageBase64: string | null = null;
   articleId!: string | null;
+  errorMessage = signal<string | null>(null);
+  message = signal<string | null>(null);
   @ViewChild('articleForm') articleForm: any;
   @ViewChild('imageInput') image: any;
 
-  constructor(private newsService: NewsService, private route: ActivatedRoute) { 
+  constructor(private newsService: NewsService, private route: ActivatedRoute, private location: Location) { 
   }
 
   ngOnInit() {
+    this.message.set(null);
+    this.errorMessage.set(null);
     this.articleId = this.route.snapshot.paramMap.get('id');
 
     if(this.articleId!=null){
       this.newsService.getArticle(this.articleId).subscribe({
         next: (res) => {
           this.article = res;
+          console.log("Article loaded");
         },
         error: (err) => {
           console.log(`An error has ocurred: ${err.statusText}`);
+          this.errorMessage.set(`An error has ocurred: ${err.statusText}`);
         }
-      })
-    }else{
+    })}else{
       this.article = {
         abstract:"", 
         body:"",
@@ -54,34 +57,34 @@ export class ArticleEdition {
   }
 
   submitForm(): void {
-    this.articleId = this.route.snapshot.paramMap.get('id');
-    const articleWithCorrectFormat = {
-        ...this.article,
-        title: this.replaceQuotes(this.article.title),
-        subtitle: this.replaceQuotes(this.article.subtitle),
-        abstract: this.replaceQuotes(this.article.abstract),
-        body: this.replaceQuotes(this.article.body),
-      };
-    if (this.articleId===null){
-      window.alert("The article "+ this.article.title + " has been published");
-      this.newsService.createArticle(articleWithCorrectFormat).subscribe({
+    this.message.set(null);
+    this.errorMessage.set(null);
+    const newArticle = {
+      ...this.article,
+      title: this.replaceQuotes(this.article.title),
+      subtitle: this.replaceQuotes(this.article.subtitle),
+      abstract: this.replaceQuotes(this.article.abstract),
+      body: this.replaceQuotes(this.article.body),
+    };
+    if (newArticle.id == null) {
+      this.newsService.createArticle(newArticle).subscribe({
         next: () => {
-          this.articleForm.resetForm();
-          console.log("Article created");
+          this.message.set(`The article "${newArticle.title}" has been created`);
+          console.log(this.message());
         },
         error: (err) => {
-          window.alert("An error has ocurred:" + err.statusText);
+          this.errorMessage.set(`An error has ocurred: ${err.statusText}`);
           console.log(`An error has ocurred: ${err.statusText}`);
         }
       });
     }else{
-      this.newsService.updateArticle(articleWithCorrectFormat).subscribe({
+      this.newsService.updateArticle(newArticle).subscribe({
         next: () => {
-          window.alert("The article "+ this.article.title + " has been edited");
+          this.message.set("The article has been updated");
           console.log("Article updated");
         },
         error: (err) => {
-          window.alert("An error has ocurred:" + err.statusText);
+          this.errorMessage.set(`An error has ocurred: ${err.statusText}`);
           console.log(`An error has ocurred: ${err.statusText}`);
         }
       });
@@ -109,6 +112,10 @@ export class ArticleEdition {
   updateImagePreview() {
     console.log("Updating image preview");
     this.article.image_data = this.article.image_data;
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
   fileChangeEvent(fileInput: any) {
@@ -145,5 +152,4 @@ export class ArticleEdition {
     }
     return true;
   }
-
 }
