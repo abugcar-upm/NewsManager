@@ -9,3 +9,14 @@
   display: inline-block;
   width: 100%;
 }
+
+.card-title:hover{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.card-img-top:hover{
+  transform: scale(1.02);
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+}
